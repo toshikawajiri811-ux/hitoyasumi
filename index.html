@@ -261,6 +261,7 @@ const LS = {
 let reviews = LS.get("reviews", {});   // placeId -> {r, tags, typeKey, kind, name, at}
 let pending = LS.get("pending", {});   // placeId -> {name, typeKey, kind, at}
 let settings = LS.get("settings", {big:false, key:""});
+let igLinks = LS.get("igLinks", {}); // placeId -> Instagramアカウント名（手入力）
 
 /* ---------- 定数 ---------- */
 const NAGANO = {lat:36.6486, lng:138.1942, label:"長野市役所"};
@@ -554,6 +555,18 @@ function mapsURL(p, mode){
   return "https://www.google.com/maps/dir/?api=1&destination="+p.lat+","+p.lng+
     (p.sample?"":"&destination_place_id="+encodeURIComponent(p.id))+"&travelmode="+mode;
 }
+function igBlock(p){
+  const ig = p.ig || igLinks[p.id] || null;
+  if(ig){
+    return '<a class="btn ghost" href="https://www.instagram.com/'+esc(ig)+'/" target="_blank" rel="noopener">Instagramで最新の営業状況を見る</a>'+
+      '<p class="sub" style="margin:.2rem 0 0">臨時休業などはこちらのほうが新しいことがあります'+
+      (igLinks[p.id]?' <button class="chip" style="min-height:2rem;padding:.1rem .6rem;font-size:.8rem" id="ig-edit">変更する</button>':'')+'</p>';
+  }
+  return '<div class="panel stack" style="gap:.5rem"><h3 class="sec-title">Instagramのアカウントを登録する</h3>'+
+    '<p class="sub" style="margin:0">このお店のInstagramのアカウント名を知っていれば、ここに登録できます。次回からボタンで開けるようになります。</p>'+
+    '<input type="text" id="ig-input" placeholder="例：hidamari_cafe_nagano（＠は不要）">'+
+    '<button class="btn ghost" id="ig-save">登録する</button></div>';
+}
 function renderDetail(p){
   state.cur = p;
   const usePhoto = p.photo && settings.key && usage().photo < dailyLimit();
@@ -585,8 +598,10 @@ function renderDetail(p){
       '<dt>トイレ</dt><dd>'+(p.acc.restroom===true?'<span class="yes">○ 車椅子で使える</span>':yn(p.restroom,"あり","なし"))+'</dd>'+
       '<dt>駐車場</dt><dd>'+yn(p.acc.parking,"あり","なし")+'</dd>'+
     '</dl></div>'+
-    (p.ig?'<a class="btn ghost" href="https://www.instagram.com/'+esc(p.ig)+'/" target="_blank" rel="noopener">Instagramで最新の営業状況を見る</a><p class="sub" style="margin:.2rem 0 0">臨時休業などはこちらのほうが新しいことがあります</p>':'')+
-    (p.phone?'<div class="panel"><h3 class="sec-title">電話番号</h3><div style="font-size:1.3rem;font-weight:700;user-select:all;font-variant-numeric:tabular-nums">'+esc(p.phone)+'</div></div>':'')+
+    igBlock(p)+
+    (p.phone?'<div class="panel stack" style="gap:.5rem"><h3 class="sec-title">電話番号</h3>'+
+      '<a class="btn" href="tel:'+esc(p.phone.replace(/[^\d+]/g,""))+'" style="font-size:1.3rem; font-variant-numeric:tabular-nums">電話をかける　'+esc(p.phone)+'</a>'+
+      '<p class="sub" style="margin:0">ボタンを押すとそのまま電話がかかります</p></div>':'')+
     '<button class="btn ghost" id="to-review">行ってきた！感想を記録する</button>';
   show("detail");
 }
@@ -657,6 +672,12 @@ document.addEventListener("click", e=>{
     return; // リンクはそのまま開く
   }
   if(t.id==="to-review" && state.cur){ openReview(state.cur.id); return; }
+  if(t.id==="ig-save" && state.cur){
+    const v = ($("ig-input").value||"").trim().replace(/^@/,"").replace(/^https?:\/\/(www\.)?instagram\.com\//i,"").replace(/\/.*$/,"");
+    if(v){ igLinks[state.cur.id] = v; LS.set("igLinks",igLinks); renderDetail(state.cur); toast("Instagramを登録しました"); }
+    return;
+  }
+  if(t.id==="ig-edit" && state.cur){ delete igLinks[state.cur.id]; LS.set("igLinks",igLinks); renderDetail(state.cur); return; }
   if(t.dataset.review){ openReview(t.dataset.review); return; }
   if(t.classList.contains("face")){
     document.querySelectorAll(".face").forEach(b=>b.setAttribute("aria-pressed", b===t ? "true":"false"));
