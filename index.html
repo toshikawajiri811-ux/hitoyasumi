@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="ja">
 <head>
@@ -280,37 +281,37 @@ const CAFE_TYPES = new Set(["cafe","coffee_shop","tea_house","bakery","dessert_s
 /* ---------- 見本データ（架空のお店） ---------- */
 const SAMPLE = [
  {id:"s01",name:"喫茶 ひだまり",type:"cafe",lat:36.6452,lng:138.1893,addr:"長野駅から北へ約300m",h:{o:"08:00",c:"18:00",off:[3]},price:1,rating:4.3,acc:{entrance:true,restroom:true,seating:true,parking:false},restroom:true,
-  menu:[["ブレンドコーヒー",450],["厚切りトースト",380],["たまごサンド",600],["あんみつ",550]],soft:["たまごサンド（耳なし可）","あんみつ"],phone:"026-000-0001"},
+  menu:[["ブレンドコーヒー",450],["厚切りトースト",380],["たまごサンド",600],["あんみつ",550]],soft:["たまごサンド（耳なし可）","あんみつ"],phone:"026-000-0001",ig:"hidamari_cafe_nagano"},
  {id:"s02",name:"そば処 ゆきやま",type:"soba",lat:36.6600,lng:138.1880,addr:"善光寺表参道沿い",h:{o:"11:00",c:"15:00",off:[2]},price:2,rating:4.5,acc:{entrance:true,restroom:false,seating:true,parking:true},restroom:true,
-  menu:[["ざるそば",900],["かけそば",850],["天ぷらそば",1500],["そばがき",700]],soft:["かけそば（やわらかめ可）","そばがき"],phone:"026-000-0002"},
+  menu:[["ざるそば",900],["かけそば",850],["天ぷらそば",1500],["そばがき",700]],soft:["かけそば（やわらかめ可）","そばがき"],phone:"026-000-0002",ig:"soba_yukiyama"},
  {id:"s03",name:"甘味 こもれび",type:"kanmi",lat:36.6522,lng:138.1942,addr:"権堂アーケード内",h:{o:"10:00",c:"19:00",off:[]},price:1,rating:4.1,acc:{entrance:true,restroom:true,seating:false,parking:false},restroom:true,
-  menu:[["おしるこ",600],["くずきり",650],["抹茶と上生菓子",800]],soft:["おしるこ","くずきり"],phone:"026-000-0003"},
+  menu:[["おしるこ",600],["くずきり",650],["抹茶と上生菓子",800]],soft:["おしるこ","くずきり"],phone:"026-000-0003",ig:"komorebi_kanmi"},
  {id:"s04",name:"まちかど食堂 すずらん",type:"teishoku",lat:36.6480,lng:138.1965,addr:"市役所東側の通り",h:{o:"11:00",c:"20:00",off:[0]},price:1,rating:4.0,acc:{entrance:true,restroom:true,seating:true,parking:true},restroom:true,
-  menu:[["焼き魚定食",950],["肉じゃが定食",900],["おかゆ膳（数量限定）",800],["小盛りごはん",-50]],soft:["おかゆ膳","ごはん小盛り・おかず半分可"],phone:"026-000-0004"},
+  menu:[["焼き魚定食",950],["肉じゃが定食",900],["おかゆ膳（数量限定）",800],["小盛りごはん",-50]],soft:["おかゆ膳","ごはん小盛り・おかず半分可"],phone:"026-000-0004",ig:"suzuran_shokudo"},
  {id:"s05",name:"洋食 みどり亭",type:"western",lat:36.6405,lng:138.1850,addr:"長野駅西口から約400m",h:{o:"11:30",c:"21:00",off:[1]},price:2,rating:4.4,acc:{entrance:false,restroom:false,seating:true,parking:false},restroom:true,
-  menu:[["ハンバーグ（小）",1100],["オムライス",1000],["クリームコロッケ",1200]],soft:["オムライス","ハーフサイズあり"],phone:"026-000-0005"},
+  menu:[["ハンバーグ（小）",1100],["オムライス",1000],["クリームコロッケ",1200]],soft:["オムライス","ハーフサイズあり"],phone:"026-000-0005",ig:"midoritei_yoshoku"},
  {id:"s06",name:"珈琲 りんご舎",type:"cafe",lat:36.6565,lng:138.1900,addr:"中央通り 善光寺下",h:{o:"09:00",c:"17:00",off:[4]},price:2,rating:4.6,acc:{entrance:false,restroom:false,seating:false,parking:false},restroom:true,
-  menu:[["ネルドリップ珈琲",600],["りんごのケーキ",550],["ホットミルク",400]],soft:["りんごのケーキ"],phone:"026-000-0006"},
+  menu:[["ネルドリップ珈琲",600],["りんごのケーキ",550],["ホットミルク",400]],soft:["りんごのケーキ"],phone:"026-000-0006",ig:"ringoya_coffee"},
  {id:"s07",name:"喫茶 ともしび",type:"cafe",lat:36.6420,lng:138.1925,addr:"長野駅東口すぐ",h:{o:"07:30",c:"16:00",off:[3]},price:1,rating:3.9,acc:{entrance:true,restroom:true,seating:true,parking:true},restroom:true,
-  menu:[["モーニングセット",500],["ホットケーキ",600],["ミックスジュース",500]],soft:["ホットケーキ"],phone:"026-000-0007"},
+  menu:[["モーニングセット",500],["ホットケーキ",600],["ミックスジュース",500]],soft:["ホットケーキ"],phone:"026-000-0007",ig:"tomoshibi_kissa"},
  {id:"s08",name:"茶房 さなだ",type:"cafe",lat:36.5660,lng:138.1995,addr:"松代 城下町",h:{o:"10:00",c:"16:30",off:[1]},price:2,rating:4.2,acc:{entrance:true,restroom:true,seating:true,parking:true},restroom:true,
-  menu:[["抹茶セット",700],["杏のパフェ",850],["ほうじ茶",450]],soft:["抹茶セット（干菓子）"],phone:"026-000-0008"},
+  menu:[["抹茶セット",700],["杏のパフェ",850],["ほうじ茶",450]],soft:["抹茶セット（干菓子）"],phone:"026-000-0008",ig:"sanada_chabou"},
  {id:"s09",name:"そば くるみ庵",type:"soba",lat:36.5632,lng:138.1962,addr:"松代 大手町",h:{o:"11:00",c:"14:30",off:[3]},price:2,rating:4.3,acc:{entrance:false,restroom:false,seating:false,parking:true},restroom:true,
-  menu:[["くるみそば",1100],["ざるそば",900]],soft:["くるみだれは甘め"],phone:"026-000-0009"},
+  menu:[["くるみそば",1100],["ざるそば",900]],soft:["くるみだれは甘め"],phone:"026-000-0009",ig:"kurumian_soba"},
  {id:"s10",name:"蔵の食堂 須坂",type:"teishoku",lat:36.6505,lng:138.3080,addr:"須坂 蔵の町並み",h:{o:"11:00",c:"19:30",off:[]},price:1,rating:4.0,acc:{entrance:true,restroom:true,seating:true,parking:true},restroom:true,
-  menu:[["みそすき丼",1000],["煮魚定食",1000],["うどん",650]],soft:["うどん（やわらかめ可）","煮魚定食"],phone:"026-000-0010"},
+  menu:[["みそすき丼",1000],["煮魚定食",1000],["うどん",650]],soft:["うどん（やわらかめ可）","煮魚定食"],phone:"026-000-0010",ig:"suzaka_kura_shokudo"},
  {id:"s11",name:"栗の茶屋 おぶせ",type:"kanmi",lat:36.6980,lng:138.3130,addr:"小布施 町並み修景地区",h:{o:"09:30",c:"17:00",off:[]},price:2,rating:4.5,acc:{entrance:true,restroom:true,seating:true,parking:true},restroom:true,
-  menu:[["栗ようかん",500],["栗おこわ膳",1600],["栗ぜんざい",750]],soft:["栗ぜんざい","栗ようかん"],phone:"026-000-0011"},
+  menu:[["栗ようかん",500],["栗おこわ膳",1600],["栗ぜんざい",750]],soft:["栗ぜんざい","栗ようかん"],phone:"026-000-0011",ig:"obuse_kurichaya"},
  {id:"s12",name:"高原そば 森の家",type:"soba",lat:36.7470,lng:138.0790,addr:"戸隠 中社近く",h:{o:"10:30",c:"16:00",off:[]},price:2,rating:4.4,acc:{entrance:true,restroom:true,seating:false,parking:true},restroom:true,
-  menu:[["ぼっちざる",1300],["山菜そば",1200]],soft:["山菜そば"],phone:"026-000-0012"},
+  menu:[["ぼっちざる",1300],["山菜そば",1200]],soft:["山菜そば"],phone:"026-000-0012",ig:"morinoie_soba"},
  {id:"s13",name:"洋食 あさま",type:"western",lat:36.4025,lng:138.2485,addr:"上田駅前",h:{o:"11:00",c:"20:30",off:[2]},price:2,rating:4.1,acc:{entrance:true,restroom:true,seating:true,parking:false},restroom:true,
-  menu:[["ビーフシチュー",1500],["グラタン",1100]],soft:["グラタン"],phone:"026-000-0013"},
+  menu:[["ビーフシチュー",1500],["グラタン",1100]],soft:["グラタン"],phone:"026-000-0013",ig:"asama_yoshoku"},
  {id:"s14",name:"ふれあい食堂 しののい",type:"teishoku",lat:36.5770,lng:138.1400,addr:"篠ノ井駅近く",h:{o:"10:30",c:"19:00",off:[0,6]},price:1,rating:3.8,acc:{entrance:true,restroom:true,seating:true,parking:true},restroom:true,
-  menu:[["日替わり定食",750],["湯豆腐定食",850]],soft:["湯豆腐定食","日替わりは量を少なめにできます"],phone:"026-000-0014"},
+  menu:[["日替わり定食",750],["湯豆腐定食",850]],soft:["湯豆腐定食","日替わりは量を少なめにできます"],phone:"026-000-0014",ig:"shinonoi_fureai"},
  {id:"s15",name:"カフェ 野の花",type:"cafe",lat:36.7420,lng:138.3700,addr:"中野市 中心部",h:{o:"10:00",c:"18:00",off:[2]},price:2,rating:4.2,acc:{entrance:true,restroom:false,seating:true,parking:true},restroom:true,
-  menu:[["ハーブティー",550],["野菜のスープセット",1000]],soft:["野菜のスープセット"],phone:"0269-00-0015"},
+  menu:[["ハーブティー",550],["野菜のスープセット",1000]],soft:["野菜のスープセット"],phone:"0269-00-0015",ig:"nonohana_cafe"},
  {id:"s16",name:"そば 雪の里",type:"soba",lat:36.8510,lng:138.3650,addr:"飯山駅から約1km",h:{o:"11:00",c:"15:00",off:[4]},price:2,rating:4.3,acc:{entrance:true,restroom:true,seating:true,parking:true},restroom:true,
-  menu:[["富倉そば",1000],["天ざる",1600]],soft:["温かいかけそばもできます"],phone:"0269-00-0016"}
+  menu:[["富倉そば",1000],["天ざる",1600]],soft:["温かいかけそばもできます"],phone:"0269-00-0016",ig:"yukinosato_soba"}
 ];
 
 /* ---------- 時刻（日本時間） ---------- */
@@ -346,7 +347,7 @@ function fromSample(s){
     id:s.id, name:s.name, typeKey:s.type, typeLabel:TYPE_LABEL[s.type], kind:CAFE_TYPES.has(s.type)?"cafe":"meal",
     lat:s.lat, lng:s.lng, addr:s.addr, open, today: closedToday ? "今日は定休日" : ("今日 "+s.h.o+"〜"+s.h.c),
     offText: s.h.off.length ? ("定休日："+s.h.off.map(d=>WD_JA[d]+"曜").join("・")) : "定休日：なし",
-    price:s.price, rating:s.rating, acc:s.acc, restroom:s.restroom, menu:s.menu, soft:s.soft, phone:s.phone,
+    price:s.price, rating:s.rating, acc:s.acc, restroom:s.restroom, menu:s.menu, soft:s.soft, phone:s.phone, ig:s.ig||null,
     website:null, photo:null, sample:true
   };
 }
@@ -367,7 +368,7 @@ function fromLive(p){
     price: PRICE[p.priceLevel] ?? null, rating:p.rating ?? null,
     acc:{entrance:a.wheelchairAccessibleEntrance ?? null, restroom:a.wheelchairAccessibleRestroom ?? null, seating:a.wheelchairAccessibleSeating ?? null,
          parking: a.wheelchairAccessibleParking ?? (p.parkingOptions ? !!(p.parkingOptions.freeParkingLot||p.parkingOptions.paidParkingLot||p.parkingOptions.freeStreetParking) : null)},
-    restroom:p.restroom ?? null, menu:null, soft:null, phone:p.nationalPhoneNumber||null, website:p.websiteUri||null,
+    restroom:p.restroom ?? null, menu:null, soft:null, phone:p.nationalPhoneNumber||null, website:p.websiteUri||null, ig:null,
     photo:(p.photos&&p.photos[0]) ? p.photos[0].name : null, sample:false
   };
 }
@@ -585,6 +586,7 @@ function renderDetail(p){
       '<dt>トイレ</dt><dd>'+(p.acc.restroom===true?'<span class="yes">○ 車椅子で使える</span>':yn(p.restroom,"あり","なし"))+'</dd>'+
       '<dt>駐車場</dt><dd>'+yn(p.acc.parking,"あり","なし")+'</dd>'+
     '</dl></div>'+
+    (p.ig?'<a class="btn ghost" href="https://www.instagram.com/'+esc(p.ig)+'/" target="_blank" rel="noopener">Instagramで最新の営業状況を見る</a><p class="sub" style="margin:.2rem 0 0">臨時休業などはこちらのほうが新しいことがあります</p>':'')+
     (p.phone?'<div class="panel"><h3 class="sec-title">電話番号</h3><div style="font-size:1.3rem;font-weight:700;user-select:all;font-variant-numeric:tabular-nums">'+esc(p.phone)+'</div></div>':'')+
     '<button class="btn ghost" id="to-review">行ってきた！感想を記録する</button>';
   show("detail");
