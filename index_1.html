@@ -1,0 +1,707 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ながの ひと休み</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=BIZ+UDPMincho:wght@700&display=swap">
+<style>
+:root{
+  --bg:#F3F5F1; --surface:#FFFFFF; --ink:#16201C; --muted:#44524C; --line:#C9D2CC;
+  --accent:#0A5566; --accent-ink:#FFFFFF; --accent-soft:#DCEBEE;
+  --open:#17663A; --open-bg:#DDF0E3; --closed:#8A2F24; --closed-bg:#F6E3DF;
+  --unknown-bg:#E8ECE9; --note-bg:#FFF4D6; --note-ink:#5A4300;
+  --radius:14px;
+  font-size:20px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#101614; --surface:#1A2320; --ink:#EEF3F0; --muted:#B7C4BE; --line:#34423C;
+    --accent:#72C6D6; --accent-ink:#06262D; --accent-soft:#16343A;
+    --open:#86DDA6; --open-bg:#173A26; --closed:#F4A99B; --closed-bg:#3E1F1A;
+    --unknown-bg:#26302C; --note-bg:#3A3218; --note-ink:#FFE7A3;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#101614; --surface:#1A2320; --ink:#EEF3F0; --muted:#B7C4BE; --line:#34423C;
+  --accent:#72C6D6; --accent-ink:#06262D; --accent-soft:#16343A;
+  --open:#86DDA6; --open-bg:#173A26; --closed:#F4A99B; --closed-bg:#3E1F1A;
+  --unknown-bg:#26302C; --note-bg:#3A3218; --note-ink:#FFE7A3;
+}
+:root.big{font-size:25px}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:"BIZ UDPGothic","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif;
+  font-size:1rem; line-height:1.6;
+}
+.wrap{max-width:640px; margin:0 auto; padding-inline:16px; padding-block:12px 96px}
+h1,h2,h3{margin:0; text-wrap:balance; line-height:1.35}
+.brand{font-family:"BIZ UDPMincho","Hiragino Mincho ProN","Yu Mincho",serif; font-size:1.6rem; letter-spacing:.04em}
+.sub{color:var(--muted); font-size:.9rem}
+button,a.btn,input,select{font:inherit}
+button{cursor:pointer}
+:focus-visible{outline:4px solid var(--accent); outline-offset:3px}
+
+/* big buttons */
+.btn{
+  display:flex; align-items:center; justify-content:center; gap:.5rem; width:100%;
+  min-height:2.9rem; padding:.7rem 1rem; border-radius:var(--radius);
+  border:2px solid var(--accent); background:var(--accent); color:var(--accent-ink);
+  font-weight:700; font-size:1.05rem; text-decoration:none; text-align:center;
+}
+.btn.ghost{background:var(--surface); color:var(--accent)}
+.btn.quiet{background:transparent; border-color:var(--line); color:var(--ink); font-weight:400}
+.btn-mode{flex-direction:column; align-items:flex-start; text-align:left; padding:1rem 1.1rem; min-height:5rem}
+.btn-mode .big{font-size:1.3rem}
+.btn-mode .small{font-weight:400; font-size:.85rem; opacity:.92}
+.stack{display:flex; flex-direction:column; gap:.75rem}
+.row{display:flex; gap:.6rem; flex-wrap:wrap}
+.row > *{flex:1 1 8rem}
+
+.topbar{display:flex; align-items:center; gap:.6rem; padding-block:.4rem .8rem}
+.back{flex:0 0 auto; width:auto; min-height:2.6rem; padding:.4rem .9rem}
+.topbar h2{font-size:1.25rem}
+
+.panel{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:1rem}
+.note{background:var(--note-bg); color:var(--note-ink); border-radius:var(--radius); padding:.7rem .9rem; font-size:.88rem}
+
+.chips{display:flex; gap:.5rem; flex-wrap:wrap}
+.chip{
+  min-height:2.6rem; padding:.35rem .9rem; border-radius:999px;
+  border:2px solid var(--line); background:var(--surface); color:var(--ink); font-size:.95rem;
+}
+.chip[aria-pressed="true"]{background:var(--accent); border-color:var(--accent); color:var(--accent-ink); font-weight:700}
+.chip[aria-pressed="true"]::before{content:"✓ "}
+
+/* list */
+.list{display:flex; flex-direction:column; gap:.75rem; margin-top:.9rem}
+.card{
+  display:block; width:100%; text-align:left; color:var(--ink);
+  background:var(--surface); border:2px solid var(--line); border-radius:var(--radius); padding:.9rem 1rem;
+}
+.card:active{border-color:var(--accent)}
+.card-head{display:flex; justify-content:space-between; align-items:flex-start; gap:.6rem}
+.card-name{font-size:1.2rem; font-weight:700; line-height:1.35}
+.meta{color:var(--muted); font-size:.9rem; margin-top:.2rem; font-variant-numeric:tabular-nums}
+.badges{display:flex; gap:.4rem; flex-wrap:wrap; margin-top:.5rem}
+.badge{font-size:.8rem; padding:.1rem .55rem; border-radius:6px; background:var(--accent-soft); color:var(--ink); border:1px solid var(--line)}
+.reason{margin-top:.5rem; font-size:.88rem; color:var(--accent); font-weight:700}
+.status{flex:0 0 auto; font-weight:700; font-size:.9rem; padding:.2rem .6rem; border-radius:8px; white-space:nowrap}
+.status.open{background:var(--open-bg); color:var(--open)}
+.status.closed{background:var(--closed-bg); color:var(--closed)}
+.status.unknown{background:var(--unknown-bg); color:var(--muted)}
+.status.open::before{content:"● "}
+.status.closed::before{content:"✕ "}
+.sample-tag{font-size:.72rem; color:var(--muted); border:1px dashed var(--line); border-radius:6px; padding:0 .35rem; margin-left:.3rem; vertical-align:middle; font-weight:400}
+
+/* detail */
+.photo{width:100%; aspect-ratio:16/9; max-width:100%; object-fit:cover; border-radius:var(--radius); background:var(--accent-soft)}
+.photo-ph{display:flex; align-items:center; justify-content:center; font-family:"BIZ UDPMincho",serif; font-size:1.6rem; color:var(--accent); border:1px solid var(--line)}
+.detail-name{font-size:1.5rem}
+.sec-title{font-size:1.05rem; margin-bottom:.5rem}
+.kv{display:grid; grid-template-columns:auto 1fr; gap:.45rem 1rem; align-items:baseline}
+.kv dt{color:var(--muted); font-size:.9rem}
+.kv dd{margin:0; font-weight:700}
+.menu{list-style:none; margin:0; padding:0}
+.menu li{display:flex; justify-content:space-between; gap:1rem; padding:.45rem 0; border-bottom:1px dotted var(--line); font-variant-numeric:tabular-nums}
+.menu li:last-child{border-bottom:0}
+.soft{margin-top:.6rem; font-size:.9rem}
+.yes{color:var(--open)} .no{color:var(--closed)} .unk{color:var(--muted); font-weight:400}
+
+/* review */
+.faces{display:grid; grid-template-columns:repeat(3,1fr); gap:.6rem}
+.face{
+  display:flex; flex-direction:column; align-items:center; gap:.2rem; padding:.9rem .3rem;
+  border:2px solid var(--line); border-radius:var(--radius); background:var(--surface); color:var(--ink);
+}
+.face .mark{font-size:2.2rem; line-height:1; font-family:"BIZ UDPMincho",serif}
+.face .lbl{font-weight:700}
+.face[aria-pressed="true"]{border-color:var(--accent); background:var(--accent-soft); outline:3px solid var(--accent)}
+
+.hist li{padding:.4rem 0; border-bottom:1px dotted var(--line); display:flex; justify-content:space-between; gap:.6rem}
+.hist{list-style:none; padding:0; margin:0}
+
+details summary{cursor:pointer; min-height:2.4rem; display:flex; align-items:center; color:var(--muted)}
+input[type=text],input[type=password]{width:100%; min-height:2.6rem; padding:.4rem .7rem; border:2px solid var(--line); border-radius:10px; background:var(--surface); color:var(--ink)}
+label{font-size:.9rem; color:var(--muted)}
+
+.toast{
+  position:fixed; left:50%; transform:translateX(-50%);
+  bottom:calc(16px + env(safe-area-inset-bottom, 0px));
+  background:var(--ink); color:var(--bg); padding:.7rem 1.1rem; border-radius:12px;
+  max-width:calc(100% - 32px); font-weight:700; z-index:10;
+}
+.empty{padding:1.2rem; text-align:center; color:var(--muted)}
+@media (prefers-reduced-motion: no-preference){ .card,.btn,.chip,.face{transition:border-color .15s, background .15s} }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- ホーム -->
+  <section id="v-home" class="stack">
+    <header class="stack" style="gap:.2rem; padding-top:.4rem">
+      <h1 class="brand">ながの ひと休み</h1>
+      <div class="sub" id="today"></div>
+    </header>
+
+    <div id="demo-note" class="note">いまは<strong>見本のお店（架空）</strong>で表示しています。Googleと連携すると実際のお店が出ます（いちばん下の設定）。</div>
+
+    <div id="pending-box" class="panel stack" hidden></div>
+
+    <div class="stack">
+      <button class="btn btn-mode" id="go-city">
+        <span class="big">長野市のまわりで探す</span>
+        <span class="small">長野市から 50km 以内・人気の順</span>
+      </button>
+      <button class="btn btn-mode" id="go-here">
+        <span class="big">いまいる場所の近く</span>
+        <span class="small">現在地から 5km 以内・近い順</span>
+      </button>
+    </div>
+
+    <div class="row">
+      <button class="btn quiet" id="font-toggle" aria-pressed="false">文字を大きくする</button>
+      <button class="btn quiet" id="go-history">わたしの記録</button>
+    </div>
+
+    <details class="panel">
+      <summary>Google連携の設定（設定する人向け）</summary>
+      <div class="stack" style="margin-top:.6rem">
+        <label for="api-key">Places API キー</label>
+        <input type="password" id="api-key" autocomplete="off" placeholder="AIza…">
+        <label for="daily-limit">1日に使う上限（検索・写真それぞれ）</label>
+        <input type="text" inputmode="numeric" id="daily-limit" placeholder="30">
+        <p class="sub" style="margin:0" id="usage-text"></p>
+        <div class="row">
+          <button class="btn" id="save-key">保存する</button>
+          <button class="btn ghost" id="clear-key">見本に戻す</button>
+        </div>
+        <p class="sub" style="margin:0">キーはこの端末の中だけに保存されます。Claude上のプレビューではGoogleへの接続ができないため、ご自身のサイトに置いたときに使えます。</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- 一覧 -->
+  <section id="v-list" hidden>
+    <div class="topbar">
+      <button class="btn quiet back" data-back="home">← 戻る</button>
+      <h2 id="list-title">お店を探す</h2>
+    </div>
+    <div class="stack" style="gap:.6rem">
+      <div id="area-chips" class="chips" aria-label="エリア"></div>
+      <div class="chips" aria-label="しぼりこみ">
+        <button class="chip" id="f-open" aria-pressed="false">営業中だけ</button>
+        <button class="chip" id="f-wheel" aria-pressed="false">車椅子で入れる</button>
+        <button class="chip" id="f-cafe" aria-pressed="false">カフェ・甘味</button>
+        <button class="chip" id="f-meal" aria-pressed="false">お食事</button>
+      </div>
+      <div id="list-msg" class="note" hidden></div>
+      <div class="sub" id="list-count"></div>
+    </div>
+    <div id="list" class="list"></div>
+  </section>
+
+  <!-- 詳細 -->
+  <section id="v-detail" hidden>
+    <div class="topbar">
+      <button class="btn quiet back" data-back="list">← 一覧へ</button>
+    </div>
+    <div id="detail" class="stack"></div>
+  </section>
+
+  <!-- 評価 -->
+  <section id="v-review" hidden>
+    <div class="topbar">
+      <button class="btn quiet back" data-back="home">← やめる</button>
+      <h2>行ったお店の感想</h2>
+    </div>
+    <div class="stack">
+      <p style="margin:0"><strong id="rv-name"></strong> はいかがでしたか？</p>
+      <div class="faces" role="group" aria-label="感想">
+        <button class="face" data-r="1" aria-pressed="false"><span class="mark">◎</span><span class="lbl">よかった</span></button>
+        <button class="face" data-r="0" aria-pressed="false"><span class="mark">○</span><span class="lbl">ふつう</span></button>
+        <button class="face" data-r="-1" aria-pressed="false"><span class="mark">△</span><span class="lbl">いまいち</span></button>
+      </div>
+      <p class="sub" style="margin:0">よかったところ（いくつでも・なくてもOK）</p>
+      <div class="chips" id="rv-tags"></div>
+      <button class="btn" id="rv-save" disabled>これで記録する</button>
+    </div>
+  </section>
+
+  <!-- 記録 -->
+  <section id="v-history" hidden>
+    <div class="topbar">
+      <button class="btn quiet back" data-back="home">← 戻る</button>
+      <h2>わたしの記録</h2>
+    </div>
+    <div class="panel"><ul class="hist" id="hist"></ul></div>
+    <p class="sub">記録は次のおすすめの順番に使われます。「いまいち」のお店は一覧の下のほうに出ます。</p>
+  </section>
+
+</div>
+<div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+<script>
+(function(){
+"use strict";
+
+/* ---------- 保存（端末内） ---------- */
+const LS = {
+  get(k, d){ try{ const v = localStorage.getItem("hitoyasumi:"+k); return v ? JSON.parse(v) : d; }catch(e){ return d; } },
+  set(k, v){ try{ localStorage.setItem("hitoyasumi:"+k, JSON.stringify(v)); }catch(e){} }
+};
+let reviews = LS.get("reviews", {});   // placeId -> {r, tags, typeKey, kind, name, at}
+let pending = LS.get("pending", {});   // placeId -> {name, typeKey, kind, at}
+let settings = LS.get("settings", {big:false, key:""});
+
+/* ---------- 定数 ---------- */
+const NAGANO = {lat:36.6486, lng:138.1942, label:"長野市役所"};
+const NAGANO_STA = {lat:36.6433, lng:138.1887, label:"長野駅"};
+const AREAS = [
+  {id:"all",  label:"長野市全体（50km）", lat:36.6486, lng:138.1942, r:50000},
+  {id:"zenk", label:"善光寺・権堂", lat:36.6560, lng:138.1905, r:3000},
+  {id:"mats", label:"松代", lat:36.5650, lng:138.1985, r:5000},
+  {id:"suza", label:"須坂・小布施", lat:36.6750, lng:138.3100, r:8000},
+  {id:"toga", label:"戸隠", lat:36.7470, lng:138.0790, r:8000},
+  {id:"ueda", label:"上田", lat:36.4020, lng:138.2490, r:8000}
+];
+const TAGS = ["入りやすい","味がよい","静か","席・トイレが楽","値段が手ごろ","店員さんが親切"];
+const TYPE_LABEL = {cafe:"喫茶・カフェ", soba:"そば", teishoku:"食堂・定食", kanmi:"甘味処", western:"洋食"};
+const CAFE_TYPES = new Set(["cafe","coffee_shop","tea_house","bakery","dessert_shop","confectionery","cake_shop","ice_cream_shop","kanmi"]);
+
+/* ---------- 見本データ（架空のお店） ---------- */
+const SAMPLE = [
+ {id:"s01",name:"喫茶 ひだまり",type:"cafe",lat:36.6452,lng:138.1893,addr:"長野駅から北へ約300m",h:{o:"08:00",c:"18:00",off:[3]},price:1,rating:4.3,acc:{entrance:true,restroom:true,seating:true,parking:false},restroom:true,
+  menu:[["ブレンドコーヒー",450],["厚切りトースト",380],["たまごサンド",600],["あんみつ",550]],soft:["たまごサンド（耳なし可）","あんみつ"],phone:"026-000-0001"},
+ {id:"s02",name:"そば処 ゆきやま",type:"soba",lat:36.6600,lng:138.1880,addr:"善光寺表参道沿い",h:{o:"11:00",c:"15:00",off:[2]},price:2,rating:4.5,acc:{entrance:true,restroom:false,seating:true,parking:true},restroom:true,
+  menu:[["ざるそば",900],["かけそば",850],["天ぷらそば",1500],["そばがき",700]],soft:["かけそば（やわらかめ可）","そばがき"],phone:"026-000-0002"},
+ {id:"s03",name:"甘味 こもれび",type:"kanmi",lat:36.6522,lng:138.1942,addr:"権堂アーケード内",h:{o:"10:00",c:"19:00",off:[]},price:1,rating:4.1,acc:{entrance:true,restroom:true,seating:false,parking:false},restroom:true,
+  menu:[["おしるこ",600],["くずきり",650],["抹茶と上生菓子",800]],soft:["おしるこ","くずきり"],phone:"026-000-0003"},
+ {id:"s04",name:"まちかど食堂 すずらん",type:"teishoku",lat:36.6480,lng:138.1965,addr:"市役所東側の通り",h:{o:"11:00",c:"20:00",off:[0]},price:1,rating:4.0,acc:{entrance:true,restroom:true,seating:true,parking:true},restroom:true,
+  menu:[["焼き魚定食",950],["肉じゃが定食",900],["おかゆ膳（数量限定）",800],["小盛りごはん",-50]],soft:["おかゆ膳","ごはん小盛り・おかず半分可"],phone:"026-000-0004"},
+ {id:"s05",name:"洋食 みどり亭",type:"western",lat:36.6405,lng:138.1850,addr:"長野駅西口から約400m",h:{o:"11:30",c:"21:00",off:[1]},price:2,rating:4.4,acc:{entrance:false,restroom:false,seating:true,parking:false},restroom:true,
+  menu:[["ハンバーグ（小）",1100],["オムライス",1000],["クリームコロッケ",1200]],soft:["オムライス","ハーフサイズあり"],phone:"026-000-0005"},
+ {id:"s06",name:"珈琲 りんご舎",type:"cafe",lat:36.6565,lng:138.1900,addr:"中央通り 善光寺下",h:{o:"09:00",c:"17:00",off:[4]},price:2,rating:4.6,acc:{entrance:false,restroom:false,seating:false,parking:false},restroom:true,
+  menu:[["ネルドリップ珈琲",600],["りんごのケーキ",550],["ホットミルク",400]],soft:["りんごのケーキ"],phone:"026-000-0006"},
+ {id:"s07",name:"喫茶 ともしび",type:"cafe",lat:36.6420,lng:138.1925,addr:"長野駅東口すぐ",h:{o:"07:30",c:"16:00",off:[3]},price:1,rating:3.9,acc:{entrance:true,restroom:true,seating:true,parking:true},restroom:true,
+  menu:[["モーニングセット",500],["ホットケーキ",600],["ミックスジュース",500]],soft:["ホットケーキ"],phone:"026-000-0007"},
+ {id:"s08",name:"茶房 さなだ",type:"cafe",lat:36.5660,lng:138.1995,addr:"松代 城下町",h:{o:"10:00",c:"16:30",off:[1]},price:2,rating:4.2,acc:{entrance:true,restroom:true,seating:true,parking:true},restroom:true,
+  menu:[["抹茶セット",700],["杏のパフェ",850],["ほうじ茶",450]],soft:["抹茶セット（干菓子）"],phone:"026-000-0008"},
+ {id:"s09",name:"そば くるみ庵",type:"soba",lat:36.5632,lng:138.1962,addr:"松代 大手町",h:{o:"11:00",c:"14:30",off:[3]},price:2,rating:4.3,acc:{entrance:false,restroom:false,seating:false,parking:true},restroom:true,
+  menu:[["くるみそば",1100],["ざるそば",900]],soft:["くるみだれは甘め"],phone:"026-000-0009"},
+ {id:"s10",name:"蔵の食堂 須坂",type:"teishoku",lat:36.6505,lng:138.3080,addr:"須坂 蔵の町並み",h:{o:"11:00",c:"19:30",off:[]},price:1,rating:4.0,acc:{entrance:true,restroom:true,seating:true,parking:true},restroom:true,
+  menu:[["みそすき丼",1000],["煮魚定食",1000],["うどん",650]],soft:["うどん（やわらかめ可）","煮魚定食"],phone:"026-000-0010"},
+ {id:"s11",name:"栗の茶屋 おぶせ",type:"kanmi",lat:36.6980,lng:138.3130,addr:"小布施 町並み修景地区",h:{o:"09:30",c:"17:00",off:[]},price:2,rating:4.5,acc:{entrance:true,restroom:true,seating:true,parking:true},restroom:true,
+  menu:[["栗ようかん",500],["栗おこわ膳",1600],["栗ぜんざい",750]],soft:["栗ぜんざい","栗ようかん"],phone:"026-000-0011"},
+ {id:"s12",name:"高原そば 森の家",type:"soba",lat:36.7470,lng:138.0790,addr:"戸隠 中社近く",h:{o:"10:30",c:"16:00",off:[]},price:2,rating:4.4,acc:{entrance:true,restroom:true,seating:false,parking:true},restroom:true,
+  menu:[["ぼっちざる",1300],["山菜そば",1200]],soft:["山菜そば"],phone:"026-000-0012"},
+ {id:"s13",name:"洋食 あさま",type:"western",lat:36.4025,lng:138.2485,addr:"上田駅前",h:{o:"11:00",c:"20:30",off:[2]},price:2,rating:4.1,acc:{entrance:true,restroom:true,seating:true,parking:false},restroom:true,
+  menu:[["ビーフシチュー",1500],["グラタン",1100]],soft:["グラタン"],phone:"026-000-0013"},
+ {id:"s14",name:"ふれあい食堂 しののい",type:"teishoku",lat:36.5770,lng:138.1400,addr:"篠ノ井駅近く",h:{o:"10:30",c:"19:00",off:[0,6]},price:1,rating:3.8,acc:{entrance:true,restroom:true,seating:true,parking:true},restroom:true,
+  menu:[["日替わり定食",750],["湯豆腐定食",850]],soft:["湯豆腐定食","日替わりは量を少なめにできます"],phone:"026-000-0014"},
+ {id:"s15",name:"カフェ 野の花",type:"cafe",lat:36.7420,lng:138.3700,addr:"中野市 中心部",h:{o:"10:00",c:"18:00",off:[2]},price:2,rating:4.2,acc:{entrance:true,restroom:false,seating:true,parking:true},restroom:true,
+  menu:[["ハーブティー",550],["野菜のスープセット",1000]],soft:["野菜のスープセット"],phone:"0269-00-0015"},
+ {id:"s16",name:"そば 雪の里",type:"soba",lat:36.8510,lng:138.3650,addr:"飯山駅から約1km",h:{o:"11:00",c:"15:00",off:[4]},price:2,rating:4.3,acc:{entrance:true,restroom:true,seating:true,parking:true},restroom:true,
+  menu:[["富倉そば",1000],["天ざる",1600]],soft:["温かいかけそばもできます"],phone:"0269-00-0016"}
+];
+
+/* ---------- 時刻（日本時間） ---------- */
+function nowJP(){
+  const f = new Intl.DateTimeFormat("en-US",{timeZone:"Asia/Tokyo",weekday:"short",hour:"2-digit",minute:"2-digit",hour12:false,month:"numeric",day:"numeric"});
+  const p = {}; f.formatToParts(new Date()).forEach(x=>p[x.type]=x.value);
+  const wd = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].indexOf(p.weekday);
+  const h = parseInt(p.hour,10)%24, m = parseInt(p.minute,10);
+  return {wd, mins:h*60+m, h, m, month:p.month, day:p.day};
+}
+const WD_JA = ["日","月","火","水","木","金","土"];
+function toMin(s){ const [h,m]=s.split(":").map(Number); return h*60+m; }
+
+/* ---------- 距離 ---------- */
+function distM(a,b){
+  const R=6371000, t=Math.PI/180;
+  const dLat=(b.lat-a.lat)*t, dLng=(b.lng-a.lng)*t;
+  const x=Math.sin(dLat/2)**2+Math.cos(a.lat*t)*Math.cos(b.lat*t)*Math.sin(dLng/2)**2;
+  return 2*R*Math.asin(Math.sqrt(x));
+}
+function distText(d){
+  if(d<1000){ return "約"+(Math.round(d/10)*10)+"m・歩いて"+Math.max(1,Math.round(d/70))+"分"; }
+  if(d<3000){ return "約"+(d/1000).toFixed(1)+"km・歩いて"+Math.round(d/70)+"分"; }
+  return "約"+(d/1000).toFixed(d<10000?1:0)+"km・車で約"+Math.max(5,Math.round(d/1000*2+3))+"分";
+}
+
+/* ---------- データ整形 ---------- */
+function fromSample(s){
+  const n = nowJP();
+  const closedToday = s.h.off.includes(n.wd);
+  const open = !closedToday && n.mins>=toMin(s.h.o) && n.mins<toMin(s.h.c);
+  return {
+    id:s.id, name:s.name, typeKey:s.type, typeLabel:TYPE_LABEL[s.type], kind:CAFE_TYPES.has(s.type)?"cafe":"meal",
+    lat:s.lat, lng:s.lng, addr:s.addr, open, today: closedToday ? "今日は定休日" : ("今日 "+s.h.o+"〜"+s.h.c),
+    offText: s.h.off.length ? ("定休日："+s.h.off.map(d=>WD_JA[d]+"曜").join("・")) : "定休日：なし",
+    price:s.price, rating:s.rating, acc:s.acc, restroom:s.restroom, menu:s.menu, soft:s.soft, phone:s.phone,
+    website:null, photo:null, sample:true
+  };
+}
+const PRICE = {PRICE_LEVEL_FREE:0,PRICE_LEVEL_INEXPENSIVE:1,PRICE_LEVEL_MODERATE:2,PRICE_LEVEL_EXPENSIVE:3,PRICE_LEVEL_VERY_EXPENSIVE:4};
+function fromLive(p){
+  const n = nowJP();
+  const coh = p.currentOpeningHours || p.regularOpeningHours;
+  const desc = coh && coh.weekdayDescriptions ? coh.weekdayDescriptions[(n.wd+6)%7] : null; // Googleは月曜はじまり
+  const a = p.accessibilityOptions || {};
+  const type = p.primaryType || "restaurant";
+  return {
+    id:p.id, name:(p.displayName&&p.displayName.text)||"（名前なし）", typeKey:type,
+    typeLabel:(p.primaryTypeDisplayName&&p.primaryTypeDisplayName.text)||"飲食店",
+    kind:CAFE_TYPES.has(type)?"cafe":"meal",
+    lat:p.location.latitude, lng:p.location.longitude, addr:(p.formattedAddress||"").replace(/^日本、(〒\d{3}-\d{4} )?/,""),
+    open: (p.currentOpeningHours && typeof p.currentOpeningHours.openNow==="boolean") ? p.currentOpeningHours.openNow : null,
+    today: desc ? desc.replace(/^[^:：]+[:：]\s*/,"今日 ") : "営業時間の情報なし", offText:"",
+    price: PRICE[p.priceLevel] ?? null, rating:p.rating ?? null,
+    acc:{entrance:a.wheelchairAccessibleEntrance ?? null, restroom:a.wheelchairAccessibleRestroom ?? null, seating:a.wheelchairAccessibleSeating ?? null,
+         parking: a.wheelchairAccessibleParking ?? (p.parkingOptions ? !!(p.parkingOptions.freeParkingLot||p.parkingOptions.paidParkingLot||p.parkingOptions.freeStreetParking) : null)},
+    restroom:p.restroom ?? null, menu:null, soft:null, phone:p.nationalPhoneNumber||null, website:p.websiteUri||null,
+    photo:(p.photos&&p.photos[0]) ? p.photos[0].name : null, sample:false
+  };
+}
+
+/* ---------- 検索 ---------- */
+const state = {mode:"city", area:AREAS[0], center:NAGANO, radius:50000, places:[], filters:{open:false,wheel:false,cafe:false,meal:false}, cur:null, msg:""};
+
+/* 無料枠を守るしくみ：1日の上限・同じ場所の再検索はしない・項目を段階的に減らして再試行 */
+const FIELDS_BASE = ["id","displayName","formattedAddress","location","primaryType","primaryTypeDisplayName","businessStatus",
+  "currentOpeningHours","regularOpeningHours","priceLevel","rating","websiteUri","nationalPhoneNumber"];
+const FIELD_LEVELS = [
+  FIELDS_BASE.concat(["photos","accessibilityOptions","restroom","parkingOptions"]),
+  FIELDS_BASE.concat(["accessibilityOptions","restroom","parkingOptions"]), // デモキーは写真なし
+  FIELDS_BASE
+];
+function todayKey(){ const n=nowJP(); return n.month+"/"+n.day; }
+function usage(){ let u = LS.get("usage",null); if(!u || u.date!==todayKey()) u = {date:todayKey(), search:0, photo:0}; return u; }
+function bump(kind){ const u = usage(); u[kind]++; LS.set("usage",u); }
+function dailyLimit(){ return Math.max(1, parseInt(settings.limit,10) || 30); }
+const cache = new Map();
+
+async function searchLive(){
+  const ck = state.center.lat.toFixed(3)+","+state.center.lng.toFixed(3)+","+state.radius+","+state.mode;
+  const hit = cache.get(ck);
+  if(hit && Date.now()-hit.at < 30*60e3){ return hit.places; }
+  if(usage().search >= dailyLimit()){ throw new Error("今日の検索回数の上限（"+dailyLimit()+"回）に達しました。明日また使えます"); }
+  let level = Math.min(settings.fieldLevel||0, FIELD_LEVELS.length-1), lastErr = "";
+  for(; level<FIELD_LEVELS.length; level++){
+    bump("search");
+    const res = await fetch("https://places.googleapis.com/v1/places:searchNearby",{
+      method:"POST",
+      headers:{"Content-Type":"application/json","X-Goog-Api-Key":settings.key,
+        "X-Goog-FieldMask":FIELD_LEVELS[level].map(f=>"places."+f).join(",")},
+      body:JSON.stringify({
+        includedTypes:["restaurant","cafe","coffee_shop","tea_house"],
+        maxResultCount:20, languageCode:"ja", regionCode:"JP",
+        rankPreference: state.mode==="here" ? "DISTANCE" : "POPULARITY",
+        locationRestriction:{circle:{center:{latitude:state.center.lat,longitude:state.center.lng},radius:state.radius}}
+      })
+    });
+    if(res.ok){
+      if((settings.fieldLevel||0)!==level){ settings.fieldLevel=level; LS.set("settings",settings); }
+      const j = await res.json();
+      const places = (j.places||[]).filter(p=>p.businessStatus!=="CLOSED_PERMANENTLY" && p.location).map(fromLive);
+      cache.set(ck,{at:Date.now(),places});
+      return places;
+    }
+    let detail = ""; try{ const j = await res.json(); detail = (j.error&&j.error.message)||""; }catch(e){}
+    lastErr = "Googleの応答 "+res.status+(detail?"："+detail:"");
+    if(res.status!==400 && res.status!==403) break; // 項目の問題でなければ再試行しない
+    if(usage().search >= dailyLimit()) break;
+  }
+  throw new Error(lastErr);
+}
+function searchSample(){
+  return SAMPLE.map(fromSample).filter(p=>distM(state.center,p)<=state.radius);
+}
+async function runSearch(){
+  state.msg = "";
+  if(settings.key){
+    try{ state.places = await searchLive(); }
+    catch(e){ state.msg = "Googleからお店を取得できませんでした（"+e.message+"）。見本のお店を表示しています。"; state.places = searchSample(); }
+  }else{
+    state.places = searchSample();
+  }
+  renderList();
+}
+
+/* ---------- おすすめ計算 ---------- */
+function prefs(){
+  const type = {}, tags = {}; let tagTotal = 0;
+  Object.values(reviews).forEach(v=>{
+    type[v.typeKey] = type[v.typeKey] || {sum:0,n:0};
+    type[v.typeKey].sum += v.r; type[v.typeKey].n += 1;
+    if(v.r===1){ (v.tags||[]).forEach(t=>{ tags[t]=(tags[t]||0)+1; tagTotal++; }); }
+  });
+  return {type, tags, tagTotal};
+}
+function tagSatisfied(t,p){
+  switch(t){
+    case "入りやすい": return p.acc.entrance===true;
+    case "席・トイレが楽": return p.acc.restroom===true || p.acc.seating===true;
+    case "値段が手ごろ": return p.price!=null && p.price<=1;
+    case "静か": return p.kind==="cafe";
+    default: return p.rating!=null && p.rating>=4.2; // 味・店員さん
+  }
+}
+function scorePlace(p, pr){
+  const d = distM(state.center,p);
+  const near = Math.max(0, 1 - d/state.radius);
+  const t = pr.type[p.typeKey]; const type = t ? t.sum/(t.n+2) : 0;
+  const rv = reviews[p.id]; const shop = rv ? rv.r : 0;
+  let match = 0;
+  if(pr.tagTotal){ let s=0; for(const k in pr.tags){ if(tagSatisfied(k,p)) s+=pr.tags[k]; } match = s/pr.tagTotal; }
+  const open = p.open===true ? 1 : 0;
+  const score = 40*near + 25*type + 20*shop + 15*match + 30*open;
+  const why = [];
+  if(p.open===true) why.push("営業中");
+  if(d<500) why.push("すぐ近く");
+  if(rv && rv.r===1) why.push("前回「よかった」");
+  if(type>0.15) why.push("お好みの"+p.typeLabel);
+  if(match>=0.5) why.push("好みに合う特徴");
+  return {d, score, bad: rv && rv.r===-1, why};
+}
+function ranked(){
+  const pr = prefs(), f = state.filters;
+  let list = state.places.map(p=>Object.assign({},p,scorePlace(p,pr)));
+  if(f.open) list = list.filter(p=>p.open===true);
+  if(f.wheel) list = list.filter(p=>p.acc.entrance===true);
+  if(f.cafe && !f.meal) list = list.filter(p=>p.kind==="cafe");
+  if(f.meal && !f.cafe) list = list.filter(p=>p.kind==="meal");
+  list.sort((a,b)=> (a.bad-b.bad) || (b.score-a.score));
+  // 上位5件に「まだ行ったことのないお店」を必ず1件
+  const top = list.slice(0,5);
+  if(top.length===5 && top.every(p=>reviews[p.id])){
+    const i = list.findIndex((p,idx)=>idx>=5 && !reviews[p.id]);
+    if(i>0){ const [x]=list.splice(i,1); x.why=["はじめてのお店"].concat(x.why); list.splice(4,0,x); }
+  }
+  return list;
+}
+
+/* ---------- 画面 ---------- */
+const $ = id=>document.getElementById(id);
+const VIEWS = ["home","list","detail","review","history"];
+function show(v){ VIEWS.forEach(x=>$("v-"+x).hidden = x!==v); window.scrollTo(0,0); if(v==="home") renderHome(); }
+function esc(s){ return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+function toast(t){ const el=$("toast"); el.textContent=t; el.hidden=false; clearTimeout(toast._t); toast._t=setTimeout(()=>el.hidden=true,3200); }
+function statusHTML(p){
+  if(p.open===true) return '<span class="status open">営業中</span>';
+  if(p.open===false) return '<span class="status closed">準備中</span>';
+  return '<span class="status unknown">営業時間不明</span>';
+}
+function yen(p){ return p==null ? "" : (p===0 ? "無料" : "￥".repeat(p)); }
+
+function renderHome(){
+  const n = nowJP();
+  const ampm = n.h<12 ? "午前" : "午後"; const hh = n.h%12===0 ? 12 : n.h%12;
+  $("today").textContent = n.month+"月"+n.day+"日（"+WD_JA[n.wd]+"） "+ampm+hh+"時"+(n.m? n.m+"分":"");
+  $("demo-note").hidden = !!settings.key;
+  const u = usage();
+  $("usage-text").textContent = settings.key ? ("今日の利用：検索 "+u.search+"／"+dailyLimit()+"回・写真 "+u.photo+"／"+dailyLimit()+"枚") : "";
+  const ids = Object.keys(pending);
+  const box = $("pending-box");
+  if(ids.length){
+    box.hidden = false;
+    box.innerHTML = '<h3 style="font-size:1.05rem">行ったお店の感想をひとこと</h3>' +
+      ids.slice(0,3).map(id=>'<button class="btn ghost" data-review="'+esc(id)+'">'+esc(pending[id].name)+' を評価する</button>').join("") +
+      '<p class="sub" style="margin:0">感想は次のおすすめに使われます。</p>';
+  }else box.hidden = true;
+  $("font-toggle").setAttribute("aria-pressed", settings.big ? "true" : "false");
+  $("font-toggle").textContent = settings.big ? "文字を標準にもどす" : "文字を大きくする";
+}
+
+function renderAreas(){
+  const box = $("area-chips");
+  if(state.mode!=="city"){ box.hidden = true; return; }
+  box.hidden = false;
+  box.innerHTML = AREAS.map(a=>'<button class="chip" data-area="'+a.id+'" aria-pressed="'+(a.id===state.area.id)+'">'+esc(a.label)+'</button>').join("");
+}
+function renderList(){
+  renderAreas();
+  const list = ranked();
+  $("list-title").textContent = state.mode==="city" ? (state.area.id==="all" ? "長野市のまわり" : state.area.label) : "いまいる場所の近く";
+  const msg = $("list-msg"); msg.hidden = !state.msg; msg.textContent = state.msg;
+  $("list-count").textContent = state.center.label+"から"+(state.radius/1000)+"km以内　"+list.length+"件（おすすめ順）";
+  $("list").innerHTML = list.length ? list.map(p=>{
+    const b = [];
+    if(p.acc.entrance) b.push("車椅子で入れる");
+    if(p.acc.restroom) b.push("車椅子トイレ");
+    else if(p.restroom) b.push("トイレあり");
+    if(p.acc.parking) b.push("駐車場");
+    return '<button class="card" data-id="'+esc(p.id)+'">'+
+      '<div class="card-head"><div><div class="card-name">'+esc(p.name)+(p.sample?'<span class="sample-tag">見本</span>':'')+'</div>'+
+      '<div class="meta">'+esc(p.typeLabel)+'　'+distText(p.d)+'</div></div>'+statusHTML(p)+'</div>'+
+      (b.length?'<div class="badges">'+b.map(x=>'<span class="badge">'+x+'</span>').join("")+'</div>':'')+
+      (p.why.length?'<div class="reason">おすすめ：'+esc(p.why.slice(0,3).join("・"))+'</div>':'')+
+      (reviews[p.id]?'<div class="meta">前回の感想：'+["△ いまいち","○ ふつう","◎ よかった"][reviews[p.id].r+1]+'</div>':'')+
+    '</button>';
+  }).join("") : '<div class="empty">条件に合うお店が見つかりませんでした。<br>しぼりこみを外すか、エリアを変えてください。</div>';
+}
+
+function yn(v, yes, no){ return v===true ? '<span class="yes">○ '+yes+'</span>' : v===false ? '<span class="no">× '+no+'</span>' : '<span class="unk">情報なし</span>'; }
+function mapsURL(p, mode){
+  return "https://www.google.com/maps/dir/?api=1&destination="+p.lat+","+p.lng+
+    (p.sample?"":"&destination_place_id="+encodeURIComponent(p.id))+"&travelmode="+mode;
+}
+function renderDetail(p){
+  state.cur = p;
+  const usePhoto = p.photo && settings.key && usage().photo < dailyLimit();
+  if(usePhoto) bump("photo");
+  const photo = usePhoto
+    ? '<img class="photo" alt="'+esc(p.name)+'の写真" src="https://places.googleapis.com/v1/'+esc(p.photo)+'/media?maxWidthPx=800&key='+encodeURIComponent(settings.key)+'">'
+    : '<div class="photo photo-ph" aria-hidden="true">'+esc(p.typeLabel)+'</div>';
+  const menu = p.menu
+    ? '<ul class="menu">'+p.menu.map(m=>'<li><span>'+esc(m[0])+'</span><span>'+(m[1]<0? m[1]+"円" : m[1].toLocaleString()+"円")+'</span></li>').join("")+'</ul>'+
+      (p.soft&&p.soft.length?'<div class="soft"><strong>やさしいメニュー：</strong>'+esc(p.soft.join("／"))+'</div>':'')
+    : '<p class="sub" style="margin:0">このお店のメニューはまだ登録されていません。'+(p.website?'<a href="'+esc(p.website)+'" target="_blank" rel="noopener">お店のホームページを見る</a>':'')+'</p>';
+  $("detail").innerHTML =
+    photo+
+    '<div><h2 class="detail-name">'+esc(p.name)+(p.sample?'<span class="sample-tag">見本</span>':'')+'</h2>'+
+    '<div class="meta">'+esc(p.typeLabel)+(p.price!=null?'　'+yen(p.price):'')+(p.rating!=null?'　評価 '+p.rating.toFixed(1):'')+'</div></div>'+
+    '<div class="panel stack" style="gap:.4rem"><div style="display:flex;gap:.6rem;align-items:center;flex-wrap:wrap">'+statusHTML(p)+'<strong>'+esc(p.today)+'</strong></div>'+
+      (p.offText?'<div class="sub">'+esc(p.offText)+'</div>':'')+
+      '<div class="sub">'+distText(distM(state.center,p))+'（'+esc(state.center.label)+'から）</div>'+
+      '<div class="sub">'+esc(p.addr)+'</div></div>'+
+    '<div class="stack" style="gap:.5rem"><h3 class="sec-title">ここへ行く</h3>'+
+      '<a class="btn" data-go href="'+mapsURL(p,"walking")+'" target="_blank" rel="noopener">歩いて行く（地図で案内）</a>'+
+      '<div class="row"><a class="btn ghost" data-go href="'+mapsURL(p,"driving")+'" target="_blank" rel="noopener">車で</a>'+
+      '<a class="btn ghost" data-go href="'+mapsURL(p,"transit")+'" target="_blank" rel="noopener">電車・バスで</a></div>'+
+      '<p class="sub" style="margin:0">Googleマップが開き、音声で道案内します。</p></div>'+
+    '<div class="panel"><h3 class="sec-title">メニュー</h3>'+menu+'</div>'+
+    '<div class="panel"><h3 class="sec-title">バリアフリー</h3><dl class="kv">'+
+      '<dt>入口</dt><dd>'+yn(p.acc.entrance,"車椅子で入れる","段差あり")+'</dd>'+
+      '<dt>席</dt><dd>'+yn(p.acc.seating,"車椅子のまま座れる","車椅子席なし")+'</dd>'+
+      '<dt>トイレ</dt><dd>'+(p.acc.restroom===true?'<span class="yes">○ 車椅子で使える</span>':yn(p.restroom,"あり","なし"))+'</dd>'+
+      '<dt>駐車場</dt><dd>'+yn(p.acc.parking,"あり","なし")+'</dd>'+
+    '</dl></div>'+
+    (p.phone?'<div class="panel"><h3 class="sec-title">電話番号</h3><div style="font-size:1.3rem;font-weight:700;user-select:all;font-variant-numeric:tabular-nums">'+esc(p.phone)+'</div></div>':'')+
+    '<button class="btn ghost" id="to-review">行ってきた！感想を記録する</button>';
+  show("detail");
+}
+
+let rv = {id:null, r:null, tags:[]};
+function openReview(id){
+  const p = state.places.find(x=>x.id===id) || (state.cur && state.cur.id===id ? state.cur : null);
+  const info = p ? {name:p.name,typeKey:p.typeKey,kind:p.kind} : pending[id];
+  if(!info) return;
+  rv = {id, r:null, tags:[], info};
+  $("rv-name").textContent = info.name;
+  document.querySelectorAll(".face").forEach(b=>b.setAttribute("aria-pressed","false"));
+  $("rv-tags").innerHTML = TAGS.map(t=>'<button class="chip" data-tag="'+t+'" aria-pressed="false">'+t+'</button>').join("");
+  $("rv-save").disabled = true;
+  show("review");
+}
+function renderHistory(){
+  const items = Object.entries(reviews).sort((a,b)=>b[1].at-a[1].at);
+  $("hist").innerHTML = items.length ? items.map(([id,v])=>{
+    const d = new Date(v.at);
+    return '<li><span><strong>'+esc(v.name)+'</strong>'+(v.sample?'<span class="sample-tag">見本の記録</span>':'')+'<br><span class="sub">'+(d.getMonth()+1)+'月'+d.getDate()+'日'+(v.tags&&v.tags.length?'・'+esc(v.tags.join("、")):'')+'</span></span><span>'+["△ いまいち","○ ふつう","◎ よかった"][v.r+1]+'</span></li>';
+  }).join("") : '<li class="empty">まだ記録はありません。お店に行ったら感想をどうぞ。</li>';
+  show("history");
+}
+
+/* ---------- 操作 ---------- */
+function applyFont(){ document.documentElement.classList.toggle("big", !!settings.big); }
+
+$("go-city").addEventListener("click", ()=>{
+  state.mode="city"; state.area=AREAS[0]; state.center=NAGANO; state.radius=50000;
+  show("list"); $("list").innerHTML='<div class="empty">お店を探しています…</div>'; runSearch();
+});
+$("go-here").addEventListener("click", ()=>{
+  state.mode="here"; state.radius=5000;
+  show("list"); $("list").innerHTML='<div class="empty">現在地を確認しています…</div>';
+  const fallback = (why)=>{
+    state.center = NAGANO_STA; runSearch().then(()=>{
+      state.msg = why+"長野駅を現在地として表示しています。"; $("list-msg").hidden=false; $("list-msg").textContent=state.msg;
+    });
+  };
+  if(!navigator.geolocation){ fallback("この端末では位置情報が使えないため、"); return; }
+  let done = false;
+  const timer = setTimeout(()=>{ if(!done){ done=true; fallback("現在地がわからなかったため、"); } }, 8000);
+  try{
+    navigator.geolocation.getCurrentPosition(pos=>{
+      if(done) return; done=true; clearTimeout(timer);
+      state.center = {lat:pos.coords.latitude, lng:pos.coords.longitude, label:"現在地"}; runSearch();
+    }, ()=>{ if(done) return; done=true; clearTimeout(timer); fallback("位置情報の利用が許可されていないため、"); },
+    {enableHighAccuracy:true, timeout:7000, maximumAge:60000});
+  }catch(e){ if(!done){ done=true; clearTimeout(timer); fallback("位置情報が使えないため、"); } }
+});
+
+document.addEventListener("click", e=>{
+  const t = e.target.closest("button, a");
+  if(!t) return;
+  if(t.dataset.back){ show(t.dataset.back); if(t.dataset.back==="list") renderList(); return; }
+  if(t.dataset.id){ const p = ranked().find(x=>x.id===t.dataset.id); if(p) renderDetail(p); return; }
+  if(t.dataset.area){
+    const a = AREAS.find(x=>x.id===t.dataset.area);
+    state.area=a; state.center={lat:a.lat,lng:a.lng,label:a.id==="all"?"長野市役所":a.label}; state.radius=a.r;
+    $("list").innerHTML='<div class="empty">お店を探しています…</div>'; runSearch(); return;
+  }
+  if(t.hasAttribute("data-go") && state.cur){
+    const p = state.cur;
+    if(!reviews[p.id] || Date.now()-reviews[p.id].at > 3600e3){
+      pending[p.id] = {name:p.name, typeKey:p.typeKey, kind:p.kind, at:Date.now()}; LS.set("pending",pending);
+    }
+    return; // リンクはそのまま開く
+  }
+  if(t.id==="to-review" && state.cur){ openReview(state.cur.id); return; }
+  if(t.dataset.review){ openReview(t.dataset.review); return; }
+  if(t.classList.contains("face")){
+    document.querySelectorAll(".face").forEach(b=>b.setAttribute("aria-pressed", b===t ? "true":"false"));
+    rv.r = parseInt(t.dataset.r,10); $("rv-save").disabled = false; return;
+  }
+  if(t.dataset.tag){
+    const on = t.getAttribute("aria-pressed")!=="true"; t.setAttribute("aria-pressed", on);
+    rv.tags = on ? rv.tags.concat(t.dataset.tag) : rv.tags.filter(x=>x!==t.dataset.tag); return;
+  }
+});
+["open","wheel","cafe","meal"].forEach(k=>{
+  $("f-"+k).addEventListener("click", e=>{
+    state.filters[k] = !state.filters[k]; e.currentTarget.setAttribute("aria-pressed", state.filters[k]); renderList();
+  });
+});
+$("rv-save").addEventListener("click", ()=>{
+  if(rv.r===null) return;
+  reviews[rv.id] = {r:rv.r, tags:rv.tags, typeKey:rv.info.typeKey, kind:rv.info.kind, name:rv.info.name, at:Date.now()};
+  delete pending[rv.id];
+  LS.set("reviews",reviews); LS.set("pending",pending);
+  show("home"); toast("記録しました。次のおすすめに反映します");
+});
+$("go-history").addEventListener("click", renderHistory);
+$("font-toggle").addEventListener("click", ()=>{ settings.big=!settings.big; LS.set("settings",settings); applyFont(); renderHome(); });
+$("save-key").addEventListener("click", ()=>{
+  settings.key = $("api-key").value.trim(); settings.limit = parseInt($("daily-limit").value,10) || 30; settings.fieldLevel = 0;
+  cache.clear(); LS.set("settings",settings); renderHome();
+  toast(settings.key ? "キーを保存しました" : "キーが空です");
+});
+$("clear-key").addEventListener("click", ()=>{ settings.key=""; $("api-key").value=""; LS.set("settings",settings); renderHome(); toast("見本のお店に戻しました"); });
+
+/* 初回：見本の記録を入れて、おすすめの効き方を見せる */
+if(!LS.get("seeded",false) && !Object.keys(reviews).length){
+  const t0 = Date.now()-86400e3*3;
+  reviews = {
+    s02:{r:1,tags:["味がよい","入りやすい"],typeKey:"soba",kind:"meal",name:"そば処 ゆきやま",at:t0,sample:true},
+    s06:{r:-1,tags:[],typeKey:"cafe",kind:"cafe",name:"珈琲 りんご舎",at:t0-86400e3,sample:true}
+  };
+  pending = {s04:{name:"まちかど食堂 すずらん",typeKey:"teishoku",kind:"meal",at:Date.now()-3600e3}};
+  LS.set("reviews",reviews); LS.set("pending",pending); LS.set("seeded",true);
+}
+$("api-key").value = settings.key || "";
+$("daily-limit").value = settings.limit || 30;
+applyFont();
+show("home");
+})();
+</script>
+</body>
+</html>
